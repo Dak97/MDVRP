@@ -1,5 +1,6 @@
 from numpy import random
 from json import loads
+import os
 '''
 Variables declaration
 '''
@@ -20,8 +21,11 @@ clients_coord = [(round(random.rand() * 200, 2),
 depots_coord = [(round(random.rand() * 200, 2),
                     round(random.rand() * 100, 2)) for _ in range(depots)] # depots' coordinates
 
-def generate_file_variables():
-    f = open("input_data.txt", "w")
+def generate_file_variables(clients,depots,vehicles,capacity,clients_list,demand_list,clients_coord,depots_coord):
+    i = 1
+    while os.path.isfile(f"problems/input_data{i}.txt"):
+        i += 1
+    f = open(f"problems/input_data{i}.txt", "w")
     f.write(f'Clienti - {clients}\nDepositi - {depots}\n')
     f.write(f'Veicoli - {vehicles}\nCapacita - {capacity}\n')
     f.write(f'Lista Clienti - {clients_list}\n')
@@ -59,6 +63,6 @@ def print_variables():
     print(f'Coordinate Depositi - {depots_coord}')
 
 if __name__ == '__main__':
-    #generate_file_variables()
+    #generate_file_variables(clients,depots,vehicles,capacity,clients_list,demand_list,clients_coord,depots_coord)
     load_varible_from_file()
     print_variables()

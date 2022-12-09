@@ -2,17 +2,26 @@ import cplex
 from docplex.mp.model import Model
 import matplotlib.pyplot as plot
 import math
-import random
+from variables import generate_file_variables
+from numpy import random
 
-depositi = 2
-clienti = 5
-capacity = 80
-veicoli = 2
+depositi = 5
+clienti = 20
+capacity = 20
+veicoli = 3
 
 set_clienti = range(clienti)
 set_depositi = range(clienti, clienti+depositi)
-domanda =  [7,30,16,9,21,15,29,23,11,5,19,29,23,21,10,15,3,41,9,28,8,8,16,10,28,7,15,14,6,19,11,12,23,26,17,6,9,15,14,7,27,13,11,16,10,5,25,17,18,10] #[random.randint(5,10) for _ in set_clienti]
-coord_nodi = [(37,52),(49,49),(52,64),(20,26),(40,30),(21,47),(17,63),(31,62),(52,33),(51,21),(42,41),(31,32),(5,25),(12,42),(36,16),(52,41),(27,23),(17,33),(13,13),(57,58),(62,42),(42,57),(16,57),(8,52),(7,38),(27,68),(30,48),(43,67),(58,48),(58,27),(37,69),(38,46),(46,10),(61,33),(62,63),(63,69),(32,22),(45,35),(59,15),(5,6),(10,17),(21,10),(5,64),(30,15),(39,10),(32,39),(25,32),(25,55),(48,28),(56,37),(20,20),(30,40),(50,30),(60,50)]
+
+flag = False
+while(not flag):
+    domanda = [random.randint(1, capacity) for i in set_clienti] # demand for each clients
+    print("sum(domanda): ",sum(domanda))
+    if depositi*capacity*veicoli >= sum(domanda):
+        flag = True
+
+coord_nodi = [(int(random.rand() * 200),int(random.rand() * 100)) for _ in range(clienti)] + [(int(random.rand() * 200),
+                    int(random.rand() * 100)) for _ in range(depositi)]
 set_vertici = list(set_clienti) + list(set_depositi)
 arcs = [(i, j, k) for i in set_clienti for j in set_clienti if i != j for k in range(veicoli*depositi)]
 deposit_arcs = []
@@ -36,6 +45,9 @@ print(len(arcs))
 # print(y)
 # print(costo)
 #print(u)
+
+generate_file_variables(clienti,depositi,veicoli,capacity,list(set_clienti),domanda,
+                        coord_nodi[0:clienti],coord_nodi[clienti:clienti+depositi])
 
 mdl = Model('MDVRP')
 x = mdl.binary_var_dict(arcs, name='x')  # variabili decisionali
@@ -77,11 +89,18 @@ if s is not None:
 
     for veicolo in range(veicoli*depositi):
         routes = [arc for arc in arcs if arc[2] == veicolo and x[arc].solution_value == 1.0]
-        
+
         for c in routes:
             c1 = c[0]
             c2 = c[1]
-            plot.plot([coord_nodi[c1][0],coord_nodi[c2][0]],[coord_nodi[c1][1],coord_nodi[c2][1]], c="#000000", marker='.', markersize=10)
+            plot.plot([coord_nodi[c1][0],coord_nodi[c2][0]],[coord_nodi[c1][1],coord_nodi[c2][1]], c="#000000", markersize=10)
+
+    for coord in coord_nodi:
+        if coord_nodi.index(coord) >= clienti:
+            color = '#FF0000'
+        else:
+            color = '#000000'
+        plot.plot(coord[0], coord[1], c=color,marker='.',markersize=10)
 
     plot.axis('equal')
     plot.show()
