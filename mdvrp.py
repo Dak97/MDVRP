@@ -5,10 +5,10 @@ import math
 from variables import generate_file_variables
 from numpy import random
 
-depositi = 5
-clienti = 20
-capacity = 20
-veicoli = 3
+depositi = 2
+clienti = 15
+capacity = 10
+veicoli = 2
 
 set_clienti = range(clienti)
 set_depositi = range(clienti, clienti+depositi)
@@ -80,7 +80,7 @@ for d in range(clienti,depositi):
         mdl.add_constraints(mdl.sum(x[d,j,k] for j in set_clienti) == 1)
         mdl.add_constraints(mdl.sum(x[j,d,k] for j in set_clienti) == 1)
 
-mdl.parameters.timelimit = (60*60)
+mdl.parameters.timelimit = (60*5)
 
 s = mdl.solve(log_output=True)
 print(s)

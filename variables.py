@@ -23,9 +23,9 @@ depots_coord = [(round(random.rand() * 200, 2),
 
 def generate_file_variables(clients,depots,vehicles,capacity,clients_list,demand_list,clients_coord,depots_coord):
     i = 1
-    while os.path.isfile(f"problems/input_data{i}.txt"):
+    while os.path.isfile(f"problems/problem_{i}.txt"):
         i += 1
-    f = open(f"problems/input_data{i}.txt", "w")
+    f = open(f"problems/problem_{i}.txt", "w")
     f.write(f'Clienti - {clients}\nDepositi - {depots}\n')
     f.write(f'Veicoli - {vehicles}\nCapacita - {capacity}\n')
     f.write(f'Lista Clienti - {clients_list}\n')

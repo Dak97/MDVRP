@@ -1,0 +1,8 @@
+Clienti - 5
+Depositi - 2
+Veicoli - 2
+Capacita - 10
+Lista Clienti - [0, 1, 2, 3, 4]
+Lista di Domanda - [4, 8, 9, 2, 9]
+Coordinate Clienti - [(7, 41), (7, 78), (116, 7), (30, 67), (42, 21)]
+Coordinate Depositi - [(44, 46), (159, 0)]
