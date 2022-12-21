@@ -5,10 +5,10 @@ import math
 from variables import generate_file_variables
 from numpy import random
 
-depositi = 2
-clienti = 15
+depositi = 3
+clienti = 16
 capacity = 10
-veicoli = 2
+veicoli = 3
 
 set_clienti = range(clienti)
 set_depositi = range(clienti, clienti+depositi)
