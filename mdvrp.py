@@ -5,23 +5,40 @@ import math
 from variables import generate_file_variables
 from numpy import random
 
-depositi = 3
-clienti = 16
-capacity = 10
-veicoli = 3
+LOAD_FROM_FILE = False
 
-set_clienti = range(clienti)
-set_depositi = range(clienti, clienti+depositi)
+def load_from_file(n_prob):
+    f = open(f"problems/problem_{n_prob}.txt", 'r')
+    lines = f.readlines()
+    lines = [line.replace('\n', '').replace(' ', '') for line in lines]
+    lines = [tuple(line.split('-')) for line in lines]
 
-flag = False
-while(not flag):
-    domanda = [random.randint(1, capacity) for i in set_clienti] # demand for each clients
-    print("sum(domanda): ",sum(domanda))
-    if depositi*capacity*veicoli >= sum(domanda):
-        flag = True
+    return int(lines[0][1]), int(lines[1][1]), int(lines[2][1]), int(lines[3][1]), eval(lines[5][1]), eval(lines[6][1])+eval(lines[7][1])
+    
+if LOAD_FROM_FILE:
+    clienti, depositi, veicoli, capacity, domanda, coord_nodi = load_from_file(1)
+    
+    set_clienti = range(clienti)
+    set_depositi = range(clienti, clienti+depositi)
+else:
+    depositi = 2
+    clienti = 7
+    capacity = 10
+    veicoli = 2
 
-coord_nodi = [(int(random.rand() * 200),int(random.rand() * 100)) for _ in range(clienti)] + [(int(random.rand() * 200),
-                    int(random.rand() * 100)) for _ in range(depositi)]
+    set_clienti = range(clienti)
+    set_depositi = range(clienti, clienti+depositi)
+
+    flag = False
+    while(not flag):
+        domanda = [random.randint(1, capacity) for i in set_clienti] # demand for each clients
+        print("sum(domanda): ",sum(domanda))
+        if depositi*capacity*veicoli >= sum(domanda):
+            flag = True
+
+    coord_nodi = [(int(random.rand() * 200),int(random.rand() * 100)) for _ in range(clienti)] + [(int(random.rand() * 200),
+                        int(random.rand() * 100)) for _ in range(depositi)]
+
 set_vertici = list(set_clienti) + list(set_depositi)
 arcs = [(i, j, k) for i in set_clienti for j in set_clienti if i != j for k in range(veicoli*depositi)]
 deposit_arcs = []
@@ -41,13 +58,14 @@ up = [(i,k) for i in set_clienti for k in range(veicoli*depositi)]
 # print(domanda)
 # print(coord_nodi)
 # print(set_vertici)
-print(len(arcs))
+# print(len(arcs))
 # print(y)
 # print(costo)
-#print(u)
+# print(u)
+#print(load_from_file(1))
 
-generate_file_variables(clienti,depositi,veicoli,capacity,list(set_clienti),domanda,
-                        coord_nodi[0:clienti],coord_nodi[clienti:clienti+depositi])
+# generate_file_variables(clienti,depositi,veicoli,capacity,list(set_clienti),domanda,
+#                         coord_nodi[0:clienti],coord_nodi[clienti:clienti+depositi])
 
 mdl = Model('MDVRP')
 x = mdl.binary_var_dict(arcs, name='x')  # variabili decisionali
