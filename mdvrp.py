@@ -5,7 +5,7 @@ import math
 from variables import generate_file_variables
 from numpy import random
 
-LOAD_FROM_FILE = False
+LOAD_FROM_FILE = True
 
 def load_from_file(n_prob):
     f = open(f"problems/problem_{n_prob}.txt", 'r')
@@ -16,13 +16,13 @@ def load_from_file(n_prob):
     return int(lines[0][1]), int(lines[1][1]), int(lines[2][1]), int(lines[3][1]), eval(lines[5][1]), eval(lines[6][1])+eval(lines[7][1])
     
 if LOAD_FROM_FILE:
-    clienti, depositi, veicoli, capacity, domanda, coord_nodi = load_from_file(1)
+    clienti, depositi, veicoli, capacity, domanda, coord_nodi = load_from_file(36)
     
     set_clienti = range(clienti)
     set_depositi = range(clienti, clienti+depositi)
 else:
     depositi = 2
-    clienti = 7
+    clienti = 13
     capacity = 10
     veicoli = 2
 
@@ -101,9 +101,9 @@ for d in range(clienti,depositi):
 mdl.parameters.timelimit = (60*5)
 
 s = mdl.solve(log_output=True)
-print(s)
+print(s._objective)
 if s is not None:
-    print(s.solve_status)
+    #print(s.solve_status)
 
     for veicolo in range(veicoli*depositi):
         routes = [arc for arc in arcs if arc[2] == veicolo and x[arc].solution_value == 1.0]
