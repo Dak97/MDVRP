@@ -106,7 +106,7 @@ if s is not None:
     #print(s.solve_status)
 
     for veicolo in range(veicoli*depositi):
-        routes = [arc for arc in arcs if arc[2] == veicolo and x[arc].solution_value == 1.0]
+        routes = [arc for arc in arcs if arc[2] == veicolo and x[arc].solution_value > 0.1]
 
         for c in routes:
             c1 = c[0]

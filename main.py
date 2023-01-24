@@ -50,8 +50,8 @@ for deposit in range(depots):
         print(mdl.add_constraints(mdl.sum(x[i, j] for j in set_vertici if j != i) == 1 for i in cluster))
         print(mdl.add_constraints(mdl.sum(x[i, j] for i in set_vertici if i != j) == 1 for j in cluster))
 
-        #print(mdl.add_constraint(mdl.sum(x[-1, j] for j in cluster) == vehicles))
-        #mdl.add_constraint(mdl.sum(x[i, -1] for i in cluster) == vehicles)
+        # mdl.add_constraint(mdl.sum(x[-1, j] for j in cluster) == 1)
+        # mdl.add_constraint(mdl.sum(x[i, -1] for i in cluster) == 1)
         mdl.add_constraints(
             (u[i] - u[j] + (capacity * x[i, j]) <= capacity - demand[j]) for i in cluster for j in cluster if
             i != j)
