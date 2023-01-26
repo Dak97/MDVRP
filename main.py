@@ -50,8 +50,8 @@ for deposit in range(depots):
         print(mdl.add_constraints(mdl.sum(x[i, j] for j in set_vertici if j != i) == 1 for i in cluster))
         print(mdl.add_constraints(mdl.sum(x[i, j] for i in set_vertici if i != j) == 1 for j in cluster))
 
-        # mdl.add_constraint(mdl.sum(x[-1, j] for j in cluster) == 1)
-        # mdl.add_constraint(mdl.sum(x[i, -1] for i in cluster) == 1)
+        mdl.add_constraint(mdl.sum(x[-1, j] for j in cluster) == 1)
+        mdl.add_constraint(mdl.sum(x[i, -1] for i in cluster) == 1)
         mdl.add_constraints(
             (u[i] - u[j] + (capacity * x[i, j]) <= capacity - demand[j]) for i in cluster for j in cluster if
             i != j)
@@ -90,7 +90,7 @@ for deposit in optimization_solutions:
 
             plot.plot([v1[0], v2[0]], [v1[1], v2[1]], color='#000000')
 
-marker_list = ['*', 'd', '+', 'P']
+marker_list = ['*', 'd', '+', 'P', 's']
 for deposit in clustering_solution:
     deposit_index = clustering_solution.index(deposit)
     plot.plot(depots_coord[deposit_index][0], depots_coord[deposit_index][1], c="#000000", marker='v', markersize=10)

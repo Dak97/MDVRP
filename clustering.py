@@ -79,13 +79,15 @@ def reorganize_clusters(clusters, priority, wrong, demands, capacity, assigned):
         # rappresento ciascun cluster come coppia (domanda cliente, cliente) ordinando in modo crescente in base alla domanda
     for client in clusters[wrong]:  # per ogni cliente del cluster da sistemare
         # ottengo la priorità di quel cliente
+        print(clusters)
+        print(wrong)
+        print(priority)
         client_priority = priority[client]
         for other_priority in client_priority:  # per ogni valore nella priorità e quindi per ogni cluster
             # se si tratta di un cluster diverso da quello da sistemare
             if other_priority[1] != wrong:
                 # ricava la rappresentazione della domanda di quel cluster
                 sort_other = sorted_demand_clusters[other_priority[1]]
-                print(demands)
                 while i < len(sort_other) and sort_other[i][0] < demands[client]:
                     # finché la domanda del cliente nel'altro cluster è minore di quello che dobbiamo spostare
                     capacity_wrong = sum(
@@ -96,8 +98,6 @@ def reorganize_clusters(clusters, priority, wrong, demands, capacity, assigned):
                         # controlla se effettuando uno scambio entrambi i cluster soddisfano il capacity constraint
                         assigned[client] = other_priority[1]
                         assigned[sort_other[i][1]] = wrong
-                        print(sort_other[i][1])
-                        print(clusters[wrong], clusters[other_priority[1]])
                         clusters[wrong].remove(client)
                         clusters[wrong].append(sort_other[i][1])
 
@@ -153,6 +153,7 @@ def cluster_algorithm(solution_assignment):
         for i in range(N):
             clusters.append([selected_centroids[i]])
             assigned_list[selected_centroids[i]] = i
+            priority[selected_centroids[i]] = []
 
         if len(deposit) == 1:
             done = True
@@ -173,11 +174,9 @@ def cluster_algorithm(solution_assignment):
                 for centroid, i in zip(centroids, range(len(centroids))):
                     priority[c].append(
                         (distances[deposit.index(c)][i]/demand[c], i))
-
                 priority[c].sort(key=lambda tup: tup[0])
 
                 i = 0
-                print(clusters)
                 while assigned_list[c] is None and i < len(clusters):
                     # G = find_occurences(min_centroid,s,c[0] + 1)
                     if capacity_constraint(c, demand, clusters[curr_centroid], capacity):
