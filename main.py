@@ -19,7 +19,7 @@ print(clustering_solution)
 
 
 '''
-Fase 3: Ottimizzazione binaria.
+Fase 3: Ottimizzazione binaria
 Per ogni deposito, per ogni cluster ottenuto nel passo precedente viene
 determinato tramite un problema di ottimizzazione binaria il percorso che
 il veicolo deve effettuare per visitare tutti i clienti assegnatagli 
