@@ -35,7 +35,7 @@ def generate_file_variables(clients,depots,vehicles,capacity,clients_list,demand
     f.close()
 def load_varible_from_file():
     # f = open("input_data.txt", 'r')
-    f = open("problems/problem_34.txt", 'r')
+    f = open("problems/problem_17.txt", 'r')
     lines = f.readlines()
     lines = [line.replace('\n', '').replace(' ', '') for line in lines]
     lines = [tuple(line.split('-')) for line in lines]

@@ -6,7 +6,6 @@ if IMPORT_FROM_FILE:
     load_varible_from_file()
 from variables import clients, depots, clients_coord, depots_coord, vehicles, capacity, demand
 
-
 '''
 Fase 1 : Assignment Problem
 Clients are assigned to a depot
@@ -23,6 +22,18 @@ def solve_assignment_problem(log_output_solution=True, print_solution=True):
     mdl.add_constraints(mdl.sum(x[i, j] for j in range(0, depots)) == 1 for i in range(0, clients))
     mdl.add_constraints(mdl.sum(demand[i]*x[i, j] for i in range(0, clients)) <= vehicles*capacity for j in range(0, depots))
     
+    # TU NON VAI QUI!!!
+    mdl.add_constraint(x[12,0] == 0)
+    mdl.add_constraint(x[7,0] == 0)
+    mdl.add_constraint(x[5,0] == 0)
+    mdl.add_constraint(x[10,2] == 0)
+    mdl.add_constraint(x[7,2] == 0)
+    mdl.add_constraint(x[8,0] == 0)
+    mdl.add_constraint(x[13,0] == 0)
+    mdl.add_constraint(x[1,0] == 0)
+    mdl.add_constraint(x[12,2] == 0)
+    mdl.add_constraint(x[6,2] == 0)
+
     mdl.parameters.timelimit = (60*60)
     s = mdl.solve(log_output=log_output_solution)
 

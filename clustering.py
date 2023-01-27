@@ -190,11 +190,11 @@ def cluster_algorithm(solution_assignment):
                             curr_centroid = priority[c][i][1]
 
                 if assigned_list[c] is None:
-                    print(c)
                     assigned_list[c] = priority[c][0][1]
                     clusters[priority[c][0][1]].append(c)
-                    reorganize_clusters(
-                        clusters, priority, priority[c][0][1], demand_list, capacity, assigned_list)
+                    print(f"Cliente PROBLEMATICO {c}")
+                    # reorganize_clusters(
+                    #     clusters, priority, priority[c][0][1], demand_list, capacity, assigned_list)
 
             old_centroids = centroids
             centroids = update_centroids(

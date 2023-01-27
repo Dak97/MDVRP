@@ -3,6 +3,7 @@ import cplex
 from docplex.mp.model import Model
 from numpy import random
 import matplotlib.pyplot as plot
+import time
 from clustering import cluster_algorithm, dist, find_min_centroid, find_occurences, capacity_constraint, update_centroids
 from variables import load_varible_from_file, IMPORT_FROM_FILE
 from assignment_problem import solve_assignment_problem
@@ -10,7 +11,7 @@ if IMPORT_FROM_FILE:
     load_varible_from_file()
 from variables import clients, depots, vehicles, capacity, clients_list, assigned_list, demand, demand_list, clients_coord, depots_coord
 
-
+start_time = time.time()
 solution_assignment = solve_assignment_problem(log_output_solution=False)
 
 clustering_solution = cluster_algorithm(solution_assignment)
@@ -27,6 +28,7 @@ minimizzando il costo
 '''
 print("FASE DI OTTIMIZAZIONE BINARIA")
 indice_deposito = -1
+sum_objective = 0
 optimization_solutions = [[] for deposit in range(depots)]
 for deposit in range(depots):
     for cluster in [item for sublist in clustering_solution[deposit] for item in sublist]:
@@ -47,19 +49,21 @@ for deposit in range(depots):
         x = mdl.binary_var_dict(arcs, name='x')  # variabili decisionali
         u = mdl.continuous_var_dict(cluster, ub=capacity, name='u')  # upper bound
         mdl.minimize(mdl.sum(costo[i, j] * x[i, j] for i in set_vertici for j in set_vertici if i != j))
-        print(mdl.add_constraints(mdl.sum(x[i, j] for j in set_vertici if j != i) == 1 for i in cluster))
-        print(mdl.add_constraints(mdl.sum(x[i, j] for i in set_vertici if i != j) == 1 for j in cluster))
+        mdl.add_constraints(mdl.sum(x[i, j] for j in set_vertici if j != i) == 1 for i in cluster)
+        mdl.add_constraints(mdl.sum(x[i, j] for i in set_vertici if i != j) == 1 for j in cluster)
 
         mdl.add_constraint(mdl.sum(x[-1, j] for j in cluster) == 1)
         mdl.add_constraint(mdl.sum(x[i, -1] for i in cluster) == 1)
+
         mdl.add_constraints(
             (u[i] - u[j] + (capacity * x[i, j]) <= capacity - demand[j]) for i in cluster for j in cluster if
             i != j)
+
         mdl.add_constraints(u[i] >= demand[i] for i in cluster)
         mdl.parameters.timelimit = (60 * 60)
         s = mdl.solve(log_output=True)
         print(s, s.solve_status)
-
+        sum_objective += s._objective
         local_solution = []
         for arc in arcs:
             if x[arc].solution_value == 1.0:
@@ -67,15 +71,19 @@ for deposit in range(depots):
         
         optimization_solutions[deposit].append(local_solution)
 
+end_time = time.time()
+
+print(f"La somma delle funzioni obiettivo è: {sum_objective}")
+print(f"Il tempo totale dell'algoritmo è: {end_time-start_time}")
 # for s in optimization_solutions:
 #     print(s)
 for deposit in optimization_solutions:
-    print("deposit :", deposit)
+    # print("deposit :", deposit)
     deposit_index = optimization_solutions.index(deposit)
     for cluster in deposit:
-        print("cluster :", cluster)
+        # print("cluster :", cluster)
         for pair in cluster:
-            print("pair :", pair)
+            # print("pair :", pair)
             if pair[0] == -1:
                 v1 = depots_coord[deposit_index]
                 v2 = clients_coord[pair[1]]
@@ -97,14 +105,14 @@ for deposit in clustering_solution:
     plot.annotate('$D_%d$' % deposit_index, (depots_coord[deposit_index][0] + 1, depots_coord[deposit_index][1]))
     marker = marker_list[deposit_index]
     for cluster in deposit[0]:
-        print(cluster)
+        # print(cluster)
         color = random.rand(3,)
         for c in cluster:
             plot.plot(clients_coord[c][0], clients_coord[c][1], c=color, marker=marker, markersize=5)
             plot.annotate('$c_{%d}$' % c, (clients_coord[c][0] + 1, clients_coord[c][1]))
 plot.axis('equal')
 # plot.show()
-print(optimization_solutions)
+# print(optimization_solutions)
 
 plot.axis('equal')
 plot.show()
