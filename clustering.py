@@ -110,7 +110,7 @@ def reorganize_clusters(clusters, priority, wrong, demands, capacity, assigned):
                         i += 1
 
 
-def cluster_algorithm(solution_assignment):
+def cluster_algorithm(solution_assignment, iterations):
     '''
     Fase 2 : Clusteringg
     Per ogni deposito, vengono suddivisi i veicoli tra i clienti assegnati
@@ -119,7 +119,6 @@ def cluster_algorithm(solution_assignment):
     clustering_solution = [[] for _ in range(depots)]
 
     for deposit in solution_assignment:
-        print(deposit)
         deposit_index = solution_assignment.index(
             deposit)  # estraggo l'indice del deposito
 
@@ -145,7 +144,6 @@ def cluster_algorithm(solution_assignment):
         done = False
         first = True
         i = 0
-        iterations = 1
         distances, min_centroid, clusters, centroid_index = [], [], [], []
         priority = {}
         # clusters contiene per ogni deposito una lista contenente il numero di cluster
@@ -162,7 +160,8 @@ def cluster_algorithm(solution_assignment):
         #     clustering_solution.append([deposit]) 
         #     done = True
 
-        while not done and iterations < 20:
+        it = 0
+        while not done and it < iterations:
             distances = dist(clients_coord, deposit, centroids)
             # clienti più vicini al centroide
             min_centroid = find_min_centroid(distances)
@@ -183,6 +182,7 @@ def cluster_algorithm(solution_assignment):
                         # print('soddisfo')
                         assigned_list[c] = curr_centroid
                         clusters[priority[c][i][1]].append(c)
+                        print(f"Ho assegnato il cliente {c} al cluster {priority[c][i][1]}: {clusters[priority[c][i][1]]}")
                     else:
                         i += 1
                         if i < len(priority[c]):
@@ -192,7 +192,8 @@ def cluster_algorithm(solution_assignment):
                 if assigned_list[c] is None:
                     assigned_list[c] = priority[c][0][1]
                     clusters[priority[c][0][1]].append(c)
-                    print(f"Cliente PROBLEMATICO {c}")
+                    print(f"Ho assegnato il cliente {c} al cluster {priority[c][0][1]}: {clusters[priority[c][0][1]]}")
+                    # print(f"Cliente PROBLEMATICO {c}")
                     # reorganize_clusters(
                     #     clusters, priority, priority[c][0][1], demand_list, capacity, assigned_list)
 
@@ -205,9 +206,9 @@ def cluster_algorithm(solution_assignment):
                 done = True
                 print(f"Clusters for deposit {deposit_index} :", clusters)
 
-            iterations += 1
+            it += 1
         
-            if not done and iterations < 20:
+            if not done and it < iterations:
                 clusters = []
                 for i in range(len(centroids)):
                     clusters.append([])
@@ -215,6 +216,6 @@ def cluster_algorithm(solution_assignment):
                     assigned_list[i] = None
 
         clustering_solution[deposit_index].append(clusters)
-        print(clustering_solution)
+        print("gianni", clusters)
 
     return clustering_solution
