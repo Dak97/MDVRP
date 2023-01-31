@@ -12,13 +12,16 @@ if IMPORT_FROM_FILE:
 from variables import clients, depots, vehicles, capacity, clients_list, assigned_list, demand, demand_list, clients_coord, depots_coord
 
 start_time = time.time()
+
 solution_assignment = solve_assignment_problem(log_output_solution=False)
 
+print("---------------------------------")
 print("PROBLEMA DI ASSEGMANETO TERMINATO")
+print("---------------------------------")
 
-clustering_solution = cluster_algorithm(solution_assignment, 20)
+clustering_solution = cluster_algorithm(solution_assignment, 10)
 
-print(clustering_solution)
+print(f"Soluzione del clustering:\n{clustering_solution}")
 print("------------------------------")
 print("-----CLUSTERING TERMINATO-----")
 print("------------------------------\n\n")
@@ -66,12 +69,12 @@ for deposit in range(depots):
 
         mdl.add_constraints(u[i] >= demand[i] for i in cluster)
         mdl.parameters.timelimit = (60 * 60)
-        s = mdl.solve(log_output=True)
-        print(s, s.solve_status)
+        s = mdl.solve(log_output=False)
+        # print(s, s.solve_status)
         sum_objective += s._objective
         local_solution = []
         for arc in arcs:
-            if x[arc].solution_value == 1.0:
+            if x[arc].solution_value > 0.1:
                 local_solution.append(arc)
         
         optimization_solutions[deposit].append(local_solution)

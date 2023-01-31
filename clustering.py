@@ -216,6 +216,5 @@ def cluster_algorithm(solution_assignment, iterations):
                     assigned_list[i] = None
 
         clustering_solution[deposit_index].append(clusters)
-        print("gianni", clusters)
 
     return clustering_solution

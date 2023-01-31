@@ -16,7 +16,7 @@ def load_from_file(n_prob):
     return int(lines[0][1]), int(lines[1][1]), int(lines[2][1]), int(lines[3][1]), eval(lines[5][1]), eval(lines[6][1])+eval(lines[7][1])
     
 if LOAD_FROM_FILE:
-    clienti, depositi, veicoli, capacity, domanda, coord_nodi = load_from_file(36)
+    clienti, depositi, veicoli, capacity, domanda, coord_nodi = load_from_file(5)
     
     set_clienti = range(clienti)
     set_depositi = range(clienti, clienti+depositi)

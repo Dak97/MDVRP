@@ -41,7 +41,7 @@ def solve_assignment_problem(log_output_solution=True, print_solution=True):
                 temp = [demand[c] for c in cluster]
                 sum_demands = sum(temp)
                 if sum_demands > capacity:
-                    mdl.add_constraints(mdl.sum(x[i, j] for i in cluster) != len(cluster) for j in range(0, depots))
+                    print(mdl.add_constraints(mdl.sum(x[i, j] for i in cluster) != len(cluster) for j in range(0, depots)))
                     print("VINCOLO AGGIUNTO!!")
                     no_problems = False
 
