@@ -32,7 +32,8 @@ def solve_assignment_problem(log_output_solution=True, print_solution=True):
             if x[pair].solution_value > 0.1:
                 solution_assignment[pair[1]].append(pair[0])
 
-        clusters = cluster_algorithm(solution_assignment, 1)
+        clusters = cluster_algorithm(solution_assignment, 10)
+
         clusters = [item for sublist in clusters for item in sublist]
         no_problems = True
         for deposit in clusters:
@@ -41,6 +42,7 @@ def solve_assignment_problem(log_output_solution=True, print_solution=True):
                 sum_demands = sum(temp)
                 if sum_demands > capacity:
                     mdl.add_constraints(mdl.sum(x[i, j] for i in cluster) != len(cluster) for j in range(0, depots))
+                    print("VINCOLO AGGIUNTO!!")
                     no_problems = False
 
         if no_problems:
@@ -50,7 +52,7 @@ def solve_assignment_problem(log_output_solution=True, print_solution=True):
         for cluster, i in zip(solution_assignment, range(depots)):
             print(f'Cluster {i} -> {cluster}')
 
-    print("SALUDA ANDONIO!")
+    
 
     return solution_assignment
 if __name__ == '__main__':

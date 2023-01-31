@@ -14,9 +14,14 @@ from variables import clients, depots, vehicles, capacity, clients_list, assigne
 start_time = time.time()
 solution_assignment = solve_assignment_problem(log_output_solution=False)
 
+print("PROBLEMA DI ASSEGMANETO TERMINATO")
+
 clustering_solution = cluster_algorithm(solution_assignment, 20)
 
 print(clustering_solution)
+print("------------------------------")
+print("-----CLUSTERING TERMINATO-----")
+print("------------------------------\n\n")
 
 
 '''
