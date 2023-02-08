@@ -6,22 +6,25 @@ import matplotlib.pyplot as plot
 import time
 from clustering import cluster_algorithm, dist, find_min_centroid, find_occurences, capacity_constraint, update_centroids
 from variables import load_varible_from_file, IMPORT_FROM_FILE
-from assignment_problem import solve_assignment_problem
-if IMPORT_FROM_FILE:
-    load_varible_from_file()
-from variables import clients, depots, vehicles, capacity, clients_list, assigned_list, demand, demand_list, clients_coord, depots_coord
+from assignment_problem import assignment_clustering
+# if IMPORT_FROM_FILE:
+#     load_varible_from_file()
+# from variables import clients, depots, vehicles, capacity, clients_list, assigned_list, demand, demand_list, clients_coord, depots_coord
 
+clients, depots, vehicles, capacity, demand, clients_list, demand_list, clients_coord, depots_coord, assigned_list = load_varible_from_file()
 start_time = time.time()
 
-solution_assignment = solve_assignment_problem(log_output_solution=False)
+clustering_solution = assignment_clustering(clients, depots, vehicles, capacity, demand, clients_list, demand_list,
+                                            clients_coord, depots_coord, assigned_list, log_output_solution=False)
 
 print("---------------------------------")
 print("PROBLEMA DI ASSEGMANETO TERMINATO")
 print("---------------------------------")
 
-clustering_solution = cluster_algorithm(solution_assignment, 10)
 
-print(f"Soluzione del clustering:\n{clustering_solution}")
+# clustering_solution = cluster_algorithm(solution_assignment, 3)
+
+#print(f"Soluzione del clustering:\n{clustering_solution}")
 print("------------------------------")
 print("-----CLUSTERING TERMINATO-----")
 print("------------------------------\n\n")
@@ -39,7 +42,7 @@ indice_deposito = -1
 sum_objective = 0
 optimization_solutions = [[] for deposit in range(depots)]
 for deposit in range(depots):
-    for cluster in [item for sublist in clustering_solution[deposit] for item in sublist]:
+    for cluster in clustering_solution[deposit]:
         set_vertici = cluster + [indice_deposito]
         arcs = [(i, j) for i in set_vertici for j in set_vertici if i != j]
         costo = {}
@@ -112,7 +115,7 @@ for deposit in clustering_solution:
     plot.plot(depots_coord[deposit_index][0], depots_coord[deposit_index][1], c="#000000", marker='v', markersize=10)
     plot.annotate('$D_%d$' % deposit_index, (depots_coord[deposit_index][0] + 1, depots_coord[deposit_index][1]))
     marker = marker_list[deposit_index]
-    for cluster in deposit[0]:
+    for cluster in deposit:
         # print(cluster)
         color = random.rand(3,)
         for c in cluster:

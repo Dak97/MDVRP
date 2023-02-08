@@ -1,9 +1,4 @@
 import math
-from variables import load_varible_from_file, IMPORT_FROM_FILE
-if IMPORT_FROM_FILE:
-    load_varible_from_file()
-from variables import clients, depots, clients_coord, depots_coord, vehicles, capacity, demand, demand_list, assigned_list
-
 
 def dist(coords, clients, centroid_list):
     result = []
@@ -110,7 +105,8 @@ def reorganize_clusters(clusters, priority, wrong, demands, capacity, assigned):
                         i += 1
 
 
-def cluster_algorithm(solution_assignment, iterations):
+def cluster_algorithm(clients, depots, vehicles, capacity, demand, clients_list, demand_list, clients_coord, depots_coord, assigned_list,
+                        solution_assignment, iterations):
     '''
     Fase 2 : Clusteringg
     Per ogni deposito, vengono suddivisi i veicoli tra i clienti assegnati
@@ -215,6 +211,6 @@ def cluster_algorithm(solution_assignment, iterations):
                 for i in range(len(assigned_list)):
                     assigned_list[i] = None
 
-        clustering_solution[deposit_index].append(clusters)
+        clustering_solution[deposit_index] = clusters
 
     return clustering_solution

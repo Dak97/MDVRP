@@ -1,17 +1,14 @@
-import imp
 import math
 from docplex.mp.model import Model
-from variables import load_varible_from_file, IMPORT_FROM_FILE
 from clustering import cluster_algorithm
-if IMPORT_FROM_FILE:
-    load_varible_from_file()
-from variables import clients, depots, clients_coord, depots_coord, vehicles, capacity, demand
+
 
 '''
 Fase 1 : Assignment Problem
 Clients are assigned to a depot
 '''
-def solve_assignment_problem(log_output_solution=True, print_solution=True):
+def assignment_clustering(clients, depots, vehicles, capacity, demand, clients_list, demand_list, clients_coord, depots_coord, assigned_list,
+                            log_output_solution=True, print_solution=True):
     done = False
     pairs = [(i, j) for i in range(0, clients) for j in range(0, depots)]  # coppie customer-depots
     costs = {(i, j): math.sqrt((clients_coord[i][0] - depots_coord[j][0]) ** 2 + (clients_coord[i][1] - depots_coord[j][1]) ** 2) for i, j in pairs}
@@ -32,17 +29,17 @@ def solve_assignment_problem(log_output_solution=True, print_solution=True):
             if x[pair].solution_value > 0.1:
                 solution_assignment[pair[1]].append(pair[0])
 
-        clusters = cluster_algorithm(solution_assignment, 10)
+        clusters = cluster_algorithm(clients, depots, vehicles, capacity, demand, clients_list, demand_list, clients_coord, depots_coord, assigned_list,
+                                        solution_assignment, 20)
 
-        clusters = [item for sublist in clusters for item in sublist]
+        # clusters = [item for sublist in clusters for item in sublist]
         no_problems = True
         for deposit in clusters:
             for cluster in deposit:
                 temp = [demand[c] for c in cluster]
                 sum_demands = sum(temp)
                 if sum_demands > capacity:
-                    print(mdl.add_constraints(mdl.sum(x[i, j] for i in cluster) != len(cluster) for j in range(0, depots)))
-                    print("VINCOLO AGGIUNTO!!")
+                    mdl.add_constraints(mdl.sum(x[i, j] for i in cluster) != len(cluster) for j in range(0, depots))
                     no_problems = False
 
         if no_problems:
@@ -54,6 +51,6 @@ def solve_assignment_problem(log_output_solution=True, print_solution=True):
 
     
 
-    return solution_assignment
+    return clusters
 if __name__ == '__main__':
-    solve_assignment_problem()
+    assignment_clustering()
