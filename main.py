@@ -5,7 +5,7 @@ from numpy import random
 import matplotlib.pyplot as plot
 import time
 # from clustering import cluster_algorithm, dist, find_min_centroid, find_occurences, capacity_constraint, update_centroids
-from variables import load_varible_from_file, IMPORT_FROM_FILE
+from variables import load_varible_from_file, load_benchmark, IMPORT_FROM_FILE, BENCH_MARK
 from assignment_problem import assignment_clustering
 # if IMPORT_FROM_FILE:
 #     load_varible_from_file()
@@ -15,6 +15,9 @@ from assignment_problem import assignment_clustering
 if BENCH_MARK:
     clients, depots, vehicles, capacity, demand, clients_list, demand_list, \
     clients_coord, depots_coord, assigned_list = load_benchmark(2)
+if IMPORT_FROM_FILE:
+    clients, depots, vehicles, capacity, demand, clients_list, demand_list, \
+    clients_coord, depots_coord, assigned_list = load_varible_from_file(2)
 start_time = time.time()
 print(clients_coord,depots_coord, sep='\n')
 
