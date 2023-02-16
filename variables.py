@@ -4,8 +4,8 @@ import os
 '''
 Variables declaration
 '''
-IMPORT_FROM_FILE = False
-BENCH_MARK = True
+IMPORT_FROM_FILE = True
+BENCH_MARK = False
 clients = 10 # number of clients 
 depots = 2 # number of depots
 vehicles = 4 # number of vehicles
@@ -34,9 +34,9 @@ def generate_file_variables(clients,depots,vehicles,capacity,clients_list,demand
     f.write(f'Coordinate Clienti - {clients_coord}\n')
     f.write(f'Coordinate Depositi - {depots_coord}\n')
     f.close()
-def load_varible_from_file():
+def load_varible_from_file(n):
     # f = open("p01.txt", 'r')
-    f = open("problems/problem_14.txt", 'r')
+    f = open(f"problems/problem_{n}.txt", 'r')
 
     lines = f.readlines()
     lines = [line.replace('\n', '').replace(' ', '') for line in lines]

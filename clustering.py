@@ -1,8 +1,4 @@
 import math
-from variables import load_varible_from_file, IMPORT_FROM_FILE
-if IMPORT_FROM_FILE:
-    load_varible_from_file()
-from variables import clients, depots, clients_coord, depots_coord, vehicles, capacity, demand, demand_list, assigned_list
 
 def dist(coords, clients, centroid_list):
     result = []
@@ -160,9 +156,9 @@ def cluster_algorithm(clients, depots, vehicles, capacity, demand, clients_list,
 
             if isEqual(old_centroids,centroids):
                 done = True
-                print(f"Clusters for deposit {deposit_index} :", clusters)
+                # print(f"Clusters for deposit {deposit_index} :", clusters)
             
-            print("\nOld centroids:\n",old_centroids,"\n New centroids\n",centroids)
+            # print("\nOld centroids:\n",old_centroids,"\n New centroids\n",centroids)
                 
 
             it += 1
@@ -171,7 +167,7 @@ def cluster_algorithm(clients, depots, vehicles, capacity, demand, clients_list,
 
             if done:
                 clustering_solution[deposit_index] = clusters
-                print(clustering_solution)
+                # print(clustering_solution)
 
             
             clusters = []

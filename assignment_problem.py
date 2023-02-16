@@ -1,6 +1,5 @@
 import math
 from docplex.mp.model import Model
-from old_clustering import old_cluster_algorithm
 from clustering import cluster_algorithm
 
 
@@ -33,10 +32,6 @@ def assignment_clustering(clients, depots, vehicles, capacity, demand, clients_l
         clusters = cluster_algorithm(clients, depots, vehicles, capacity, demand, clients_list, demand_list, clients_coord, depots_coord, assigned_list,
                                         solution_assignment, 20)
 
-        # clusters = old_cluster_algorithm(clients, depots, vehicles, capacity, demand, clients_list, demand_list, clients_coord, depots_coord, assigned_list,
-        #                                 solution_assignment, 20)  
-
-        # clusters = [item for sublist in clusters for item in sublist]
         no_problems = True
         for deposit in clusters:
             for cluster in deposit:
