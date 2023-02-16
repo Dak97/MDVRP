@@ -4,7 +4,7 @@ from docplex.mp.model import Model
 from numpy import random
 import matplotlib.pyplot as plot
 import time
-from clustering import cluster_algorithm, dist, find_min_centroid, find_occurences, capacity_constraint, update_centroids
+# from clustering import cluster_algorithm, dist, find_min_centroid, find_occurences, capacity_constraint, update_centroids
 from variables import load_varible_from_file, IMPORT_FROM_FILE
 from assignment_problem import assignment_clustering
 # if IMPORT_FROM_FILE:
@@ -12,23 +12,21 @@ from assignment_problem import assignment_clustering
 # from variables import clients, depots, vehicles, capacity, clients_list, assigned_list, demand, demand_list, clients_coord, depots_coord
 
 clients, depots, vehicles, capacity, demand, clients_list, demand_list, clients_coord, depots_coord, assigned_list = load_varible_from_file()
+
 start_time = time.time()
 
 clustering_solution = assignment_clustering(clients, depots, vehicles, capacity, demand, clients_list, demand_list,
                                             clients_coord, depots_coord, assigned_list, log_output_solution=False)
 
-print("---------------------------------")
-print("PROBLEMA DI ASSEGMANETO TERMINATO")
-print("---------------------------------")
+print("----------------------------------------------")
+print("PROBLEMA DI ASSEGMANETO E CLUSTERING TERMINATO")
+print("----------------------------------------------\n\n")
 
 
 # clustering_solution = cluster_algorithm(solution_assignment, 3)
 
-#print(f"Soluzione del clustering:\n{clustering_solution}")
-print("------------------------------")
-print("-----CLUSTERING TERMINATO-----")
-print("------------------------------\n\n")
 
+print(f"Soluzione del clustering:\n{clustering_solution}")
 
 '''
 Fase 3: Ottimizzazione binaria
@@ -84,8 +82,9 @@ for deposit in range(depots):
 
 end_time = time.time()
 
-print(f"La somma delle funzioni obiettivo è: {sum_objective}")
-print(f"Il tempo totale dell'algoritmo è: {end_time-start_time}")
+print(f"\n\nIl tempo totale dell'algoritmo è: {end_time-start_time}")
+print(f"\nLa somma delle funzioni obiettivo è: {sum_objective}")
+
 # for s in optimization_solutions:
 #     print(s)
 for deposit in optimization_solutions:

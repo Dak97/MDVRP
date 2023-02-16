@@ -34,14 +34,13 @@ def generate_file_variables(clients,depots,vehicles,capacity,clients_list,demand
     f.write(f'Coordinate Depositi - {depots_coord}\n')
     f.close()
 def load_varible_from_file():
-    f = open("p01.txt", 'r')
-    # f = open("problems/problem_12.txt", 'r')
+    # f = open("p01.txt", 'r')
+    f = open("problems/problem_14.txt", 'r')
 
     lines = f.readlines()
     lines = [line.replace('\n', '').replace(' ', '') for line in lines]
     lines = [tuple(line.split('-')) for line in lines]
 
-    # global clients, depots, vehicles, capacity, demand, clients_list, demand_list, clients_coord, depots_coord, assigned_list
     clients = int(lines[0][1]) 
     depots = int(lines[1][1])
     vehicles = int(lines[2][1])
@@ -53,6 +52,7 @@ def load_varible_from_file():
     depots_coord = eval(lines[7][1])
 
     f.close()
+    
     demand = {i: demand_list[i] for i in clients_list}
     assigned_list = [None for i in range(clients)]
 

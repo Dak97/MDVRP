@@ -16,7 +16,7 @@ def load_from_file(n_prob):
     return int(lines[0][1]), int(lines[1][1]), int(lines[2][1]), int(lines[3][1]), eval(lines[5][1]), eval(lines[6][1])+eval(lines[7][1])
     
 if LOAD_FROM_FILE:
-    clienti, depositi, veicoli, capacity, domanda, coord_nodi = load_from_file(5)
+    clienti, depositi, veicoli, capacity, domanda, coord_nodi = load_from_file(14)
     
     set_clienti = range(clienti)
     set_depositi = range(clienti, clienti+depositi)
@@ -77,7 +77,7 @@ mdl.minimize(mdl.sum(costo[i, j]*x[i, j, k] for i in set_vertici for j in set_ve
 mdl.add_constraints(mdl.sum(y[i, k] for k in range(veicoli*depositi)) == 1 for i in set_clienti if i < clienti)
 
 for d in set_depositi:
-    mdl.add_constraint(mdl.sum(y[d, k] for k in range(veicoli*depositi)) == veicoli )
+    mdl.add_constraint(mdl.sum(y[d, k] for k in range(veicoli*depositi)) <= veicoli)
 
 # constraint 1.31 pag 15
 mdl.add_constraints(mdl.sum(x[i,j,k] for j in set_vertici if i != j and (i,j,k) in x) == y[i,k] for i in set_vertici for k in range(veicoli*depositi) )
@@ -98,10 +98,14 @@ for d in range(clienti,depositi):
         mdl.add_constraints(mdl.sum(x[d,j,k] for j in set_clienti) == 1)
         mdl.add_constraints(mdl.sum(x[j,d,k] for j in set_clienti) == 1)
 
-mdl.parameters.timelimit = (60*5)
+
+mdl.parameters.timelimit = (60*120)
 
 s = mdl.solve(log_output=True)
-print(s._objective)
+print(s)
+print(f"Funzione obiettvo: {s._objective}")
+print(f"Tempo impiegato: {mdl.solve_details.time}")
+
 if s is not None:
     #print(s.solve_status)
 
