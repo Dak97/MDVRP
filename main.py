@@ -11,9 +11,12 @@ from assignment_problem import assignment_clustering
 #     load_varible_from_file()
 # from variables import clients, depots, vehicles, capacity, clients_list, assigned_list, demand, demand_list, clients_coord, depots_coord
 
-clients, depots, vehicles, capacity, demand, clients_list, demand_list, clients_coord, depots_coord, assigned_list = load_varible_from_file()
-
+# clients, depots, vehicles, capacity, demand, clients_list, demand_list, clients_coord, depots_coord, assigned_list = load_varible_from_file()
+if BENCH_MARK:
+    clients, depots, vehicles, capacity, demand, clients_list, demand_list, \
+    clients_coord, depots_coord, assigned_list = load_benchmark(2)
 start_time = time.time()
+print(clients_coord,depots_coord, sep='\n')
 
 clustering_solution = assignment_clustering(clients, depots, vehicles, capacity, demand, clients_list, demand_list,
                                             clients_coord, depots_coord, assigned_list, log_output_solution=False)
@@ -108,7 +111,7 @@ for deposit in optimization_solutions:
 
             plot.plot([v1[0], v2[0]], [v1[1], v2[1]], color='#000000')
 
-marker_list = ['*', 'd', '+', 'P', 's']
+marker_list = ['*', 'd', '+', 'P', 's', 'h', 'x','^','v','>','<']
 for deposit in clustering_solution:
     deposit_index = clustering_solution.index(deposit)
     plot.plot(depots_coord[deposit_index][0], depots_coord[deposit_index][1], c="#000000", marker='v', markersize=10)
