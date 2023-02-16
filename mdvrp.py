@@ -2,7 +2,7 @@ import cplex
 from docplex.mp.model import Model
 import matplotlib.pyplot as plot
 import math
-from variables import generate_file_variables
+from variables import generate_file_variables, load_benchmark
 from numpy import random
 
 LOAD_FROM_FILE = True
@@ -16,9 +16,10 @@ def load_from_file(n_prob):
     return int(lines[0][1]), int(lines[1][1]), int(lines[2][1]), int(lines[3][1]), eval(lines[5][1]), eval(lines[6][1])+eval(lines[7][1])
     
 if LOAD_FROM_FILE:
-    clienti, depositi, veicoli, capacity, domanda, coord_nodi = load_from_file(5)
-    
-    set_clienti = range(clienti)
+    # clienti, depositi, veicoli, capacity, domanda, coord_nodi = load_from_file(5)
+    clienti, depositi, veicoli, capacity, domanda, set_clienti, demand_list, \
+    clients_coord, depots_coord, assigned_list = load_benchmark(23)
+    coord_nodi = clients_coord + depots_coord
     set_depositi = range(clienti, clienti+depositi)
 else:
     depositi = 2
@@ -98,7 +99,7 @@ for d in range(clienti,depositi):
         mdl.add_constraints(mdl.sum(x[d,j,k] for j in set_clienti) == 1)
         mdl.add_constraints(mdl.sum(x[j,d,k] for j in set_clienti) == 1)
 
-mdl.parameters.timelimit = (60*5)
+mdl.parameters.timelimit = (60*120)
 
 s = mdl.solve(log_output=True)
 print(s._objective)

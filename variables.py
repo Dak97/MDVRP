@@ -4,7 +4,8 @@ import os
 '''
 Variables declaration
 '''
-IMPORT_FROM_FILE = True
+IMPORT_FROM_FILE = False
+BENCH_MARK = True
 clients = 10 # number of clients 
 depots = 2 # number of depots
 vehicles = 4 # number of vehicles
@@ -57,6 +58,37 @@ def load_varible_from_file():
     assigned_list = [None for i in range(clients)]
 
     return clients, depots, vehicles, capacity, demand, clients_list, demand_list, clients_coord, depots_coord, assigned_list
+
+def load_benchmark(n):
+    demand = {}
+    clients_coord = []
+    depots_coord = []
+
+    if n < 10:
+        n = f'0{n}'
+    else:
+        n = str(n)
+
+    f = open(f"benchmark/p{n}.txt", 'r')
+    lines = f.readlines()
+    lines = [tuple(line.split()) for line in lines]
+
+    vehicles = int(lines[0][1])
+    clients = int(lines[0][2])
+    clients_list = list(range(clients))
+    depots = int(lines[0][3])
+    capacity = int(lines[1][1])
+    for i in range(depots + 1, depots + clients + 1):
+        clients_coord.append((int(lines[i][1]), int(lines[i][2])))
+        demand[i - depots - 1] = int(lines[i][4])
+
+    for i in range(depots + clients + 1, len(lines)):
+        depots_coord.append((int(lines[i][1]), int(lines[i][2])))
+
+    demand_list = list(demand.values())
+    assigned_list = [None for _ in range(clients)]
+    return clients, depots, vehicles, capacity, demand, clients_list, demand_list, clients_coord, depots_coord, assigned_list
+
 def print_variables():
     print(f'Clienti - {clients}\nDepositi - {depots}')
     print(f'Veicoli - {vehicles}\nCapacità - {capacity}')
@@ -68,6 +100,7 @@ def print_variables():
     print(f'Coordinate Depositi - {depots_coord}')
 
 if __name__ == '__main__':
+    load_benchmark(1)
     #generate_file_variables(clients,depots,vehicles,capacity,clients_list,demand_list,clients_coord,depots_coord)
-    load_varible_from_file()
-    print_variables()
+    #load_varible_from_file()
+    #print_variables()
